@@ -57,6 +57,11 @@ rules = yara.compile(filepaths=rule_files)
 #  'strings': [StringMatch, StringMatch]
 #}
 
+
+
+
+
+
 ###############################
 
 
