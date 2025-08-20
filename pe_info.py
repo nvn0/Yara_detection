@@ -1,20 +1,29 @@
+#pip install pefile
 import pefile
 
+
+# Este script verifica se um ficheiro é um executavel windows mesmo que tenha outra extensão de ficheiro
+
 # Caminho do arquivo .exe
-exe_path = r"C:\Users\nunoc\Desktop\start-apps.exe"
+exe_path = r"C:\Users\nunoc\Desktop\analise\experiencias - Copy.png"
 
 # Carrega o arquivo PE
-pe = pefile.PE(exe_path)
+try:
+    pe = pefile.PE(exe_path)
+except pefile.PEFormatError:
+    print("Erro - O ficheiro não é um binário/executavel")
+    exit()
+
 
 # Exibe informações gerais do cabeçalho
-print("=== Informações Gerais do Ficheiro PE ===")
+print("========= Informações Gerais do Ficheiro PE =========")
 print(f"Machine: {hex(pe.FILE_HEADER.Machine)}")
 print(f"Number of Sections: {pe.FILE_HEADER.NumberOfSections}")
 print(f"TimeDateStamp: {hex(pe.FILE_HEADER.TimeDateStamp)}")
 print(f"Characteristics: {hex(pe.FILE_HEADER.Characteristics)}")
 
-# Exibe as seções do executável
-print("\n=== Seções ===")
+# Exibe as secções do executável
+print("\n============ Secções ============")
 for section in pe.sections:
     print(f"Nome: {section.Name.decode('utf-8').strip()}")
     print(f"Virtual Size: {hex(section.Misc_VirtualSize)}")

@@ -1,9 +1,13 @@
+#pip install yara-python
+
+
 import yara
 import os
 import hashlib
 import colorama
 from colorama import Back, Fore, Style
 
+#import vt_scan
 from vt_scan import file_scan, file_hash_info
 
 colorama.init(autoreset=True)
@@ -97,6 +101,7 @@ for root, dirs, files in os.walk(files_directory):
         fl = calcular_hash(file_path)
   
         vt = file_hash_info(fl)
+        
         #vts = file_scan(file_path)
         
         # Processar e imprimir os resultados
@@ -113,14 +118,14 @@ for root, dirs, files in os.walk(files_directory):
             print(Fore.YELLOW + "Rules Matched:", count)
             count = 0
         print("-----------------------")
-        print(Fore.YELLOW + " VirusTotal analysis:")
+        print(Fore.YELLOW + "VirusTotal analysis:")
         print(Fore.YELLOW + "Hash search:", vt.last_analysis_stats)
         if vt.last_analysis_stats['malicious'] > 30:
             print(Fore.RED + "Dangerous")
         elif vt.last_analysis_stats['malicious'] < 14 and vt.last_analysis_stats['malicious'] > 5:
             print(Fore.YELLOW + "Suspicious, but maybe not dangerous needs more analysis")
-        elif vt.last_analysis_stats['malicious'] =< 5 :
-            print(Fore.Green + "0 or just a few engines have flagged this as malicious. Please note, this does not guarantee that the file is not malicious.")
+        elif vt.last_analysis_stats['malicious'] <= 5 :
+            print(Fore.GREEN + "0 or just a few engines have flagged this as malicious. Please note, this does not guarantee that the file is not malicious.")
         try:    
             print(Fore.YELLOW + "File_scan:", vts)  
         except:

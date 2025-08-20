@@ -1,3 +1,4 @@
+#pip install vt-py
 import vt
 from dotenv import load_dotenv
 
@@ -31,6 +32,18 @@ def url_scan(url):
 
 
 
+#def file_hash_info(hash):
+#    try:
+#        client = conn()
+#        file = client.get_object(f"/files/{hash}")
+#    except:
+#        print("ERRO - Ocorreu um problema de conexão com o VirusTotal")
+#    else:
+#        client.close()
+#        return file
+ 
+
+
 def file_hash_info(hash):
     try:
         client = conn()
@@ -41,8 +54,5 @@ def file_hash_info(hash):
         client.close()
         return file
  
-
-
-
 
 
