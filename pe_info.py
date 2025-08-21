@@ -1,10 +1,13 @@
 #pip install pefile
 import pefile
+import mimetypes
 import sys
+
+argumento = None
 
 if len(sys.argv) > 1:
     argumento = sys.argv[1]
-    print("Argumento recebido:", argumento)
+    print("\nArgumento recebido:", argumento)
 else:
     print("Nenhum argumento fornecido.")
 
@@ -12,22 +15,40 @@ else:
 # Este script verifica se um ficheiro é um executavel windows mesmo que tenha outra extensão de ficheiro
 
 # Caminho do arquivo .exe
-exe_path = r"C:\Users\nunoc\Desktop\analise\experiencias - Copy.png"
+pre_exe_path = r"C:\Users\nunoc\Desktop\analise\experiencias - Copy.png"
 
-exe_path = rf"{argumento}"
+if argumento != None:
+    exe_path = rf"{argumento}"
+else:
+    exe_path = pre_exe_path
+    
+assert exe_path, 'Nenhum caminho recebido'
 
-#print(exe_path)
+print(exe_path)
+
+tipo, encoding = mimetypes.guess_type(exe_path)
+print("\nFile type (based on extension):", tipo)
+
+
+
+#primeiros bytes do ficheiro:
+with open(exe_path, "rb") as f:
+    primeiros_bytes = f.read(256)  # lê os primeiros 256 bytes
+    print(f"\nFirst bytes:{primeiros_bytes}")
+    print(f"\nFirst bytes:{primeiros_bytes.hex()}")
+
+
 
 # Carrega o arquivo PE
 try:
     pe = pefile.PE(exe_path)
 except pefile.PEFormatError:
-    print("Erro - O ficheiro não é um binário/executavel")
+    print("\nErro - O ficheiro não é um binário/executavel windows")
     exit()
 
 
 # Exibe informações gerais do cabeçalho
-print("========= Informações Gerais do Ficheiro PE =========")
+print("\n========= Informações Gerais do Ficheiro PE =========")
 print(f"Machine: {hex(pe.FILE_HEADER.Machine)}")
 print(f"Number of Sections: {pe.FILE_HEADER.NumberOfSections}")
 print(f"TimeDateStamp: {hex(pe.FILE_HEADER.TimeDateStamp)}")
