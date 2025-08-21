@@ -1,11 +1,22 @@
 #pip install pefile
 import pefile
+import sys
+
+if len(sys.argv) > 1:
+    argumento = sys.argv[1]
+    print("Argumento recebido:", argumento)
+else:
+    print("Nenhum argumento fornecido.")
 
 
 # Este script verifica se um ficheiro é um executavel windows mesmo que tenha outra extensão de ficheiro
 
 # Caminho do arquivo .exe
 exe_path = r"C:\Users\nunoc\Desktop\analise\experiencias - Copy.png"
+
+exe_path = rf"{argumento}"
+
+#print(exe_path)
 
 # Carrega o arquivo PE
 try:
