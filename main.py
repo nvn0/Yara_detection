@@ -134,6 +134,9 @@ def scan_directory(files_directory):
 
 
 if __name__ == "__main__":
+
+    MULTI_PE_ANALYSE = False
+
     #Analisar pasta:
     files_directory = r'C:\analise'
     #files_directory = '/caminho/para/ficheiros' # linux
@@ -142,8 +145,9 @@ if __name__ == "__main__":
 
     ficheiros = [os.path.join(files_directory,f) for f in os.listdir(files_directory) if os.path.isfile(os.path.join(files_directory, f))]
 
-    print(ficheiros)
-    if len(ficheiros) == 1:
+
+    #print(ficheiros)
+    if len(ficheiros) == 1 and MULTI_PE_ANALYSE == False:
         print(Fore.YELLOW +  "\n============================ File Type: ============================")
         file_type(ficheiros[0])
 
@@ -151,6 +155,16 @@ if __name__ == "__main__":
         is_pe_file(ficheiros[0])
     else:
         print(f"A pasta tem {len(ficheiros)} ficheiros.")
+
+    # If are various PE files in the directory the output can be too long andand hard to read
+    if MULTI_PE_ANALYSE == True:
+        for f in ficheiros:
+            print(Fore.YELLOW +  "\n============================ File Type: ============================")
+            file_type(f)
+
+            print(Fore.YELLOW + "\n============================ PE Info: ============================")
+            is_pe_file(f)
+
 
     print("---------------------------------------------------------------")
     print("Scan completed.")
