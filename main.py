@@ -106,7 +106,7 @@ def scan_directory(files_directory):
             
             # Processar e imprimir os resultados
             print("---------------------------------------------------------------")
-            print(Fore.CYAN + f'Scanning file: {file_path}')
+            print(Fore.CYAN + "Scanning file:", file_path)
             print(Fore.YELLOW + "File hash (SHA-256):", fl)
             print("---------------------------------------------------------------")
             if matches: 

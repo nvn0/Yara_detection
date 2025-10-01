@@ -29,12 +29,13 @@ def url_scan(url):
     try:
         client = conn()
         url = client.scan_url(url)
+        urls = client.get_object("/urls/{}", url)
     except:
         print("ERRO - Ocorreu um problema de conexão com o VirusTotal")
     else:
         client.close()
-    urls = client.get_object("/urls/{}", url)
-    return urls
+        return urls
+    
 
 
 

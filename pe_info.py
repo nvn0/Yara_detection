@@ -6,6 +6,7 @@ import sys
 
 def file_type(exe_path):
     tipo, encoding = mimetypes.guess_type(exe_path)
+    print(f"\nFile encoding: {encoding}")
     print("\nFile type (based on extension):", tipo)
 
 
