@@ -4,11 +4,14 @@
 import yara
 import os
 import hashlib
+#from pathlib import Path
 import colorama
 from colorama import Back, Fore, Style
 
 #import vt_scan
 from vt_scan import file_scan, file_hash_info
+
+from pe_info import file_type, is_pe_file
 
 colorama.init(autoreset=True)
 
@@ -86,55 +89,69 @@ rules = yara.compile(filepaths=rule_files)
 ###############################
 
 
-#Analisar pasta:
-files_directory = r'C:\Users\nunoc\Desktop\analise'
-#files_directory = '/caminho/para/ficheiros' # linux
 
-
-count = 0
-# Iterar sobre os ficheiros na pasta
-for root, dirs, files in os.walk(files_directory):
-    for file in files:
-        file_path = os.path.join(root, file)
-        # analisar o ficheiro
-        matches = rules.match(file_path)
-        fl = calcular_hash(file_path)
-  
-        vt = file_hash_info(fl)
-        
-        #vts = file_scan(file_path)
-        
-        # Processar e imprimir os resultados
-        print("---------------------------------------------------------------")
-        print(Fore.CYAN + f'Scanning file: {file_path}')
-        print(Fore.YELLOW + "File hash (SHA-256):", fl)
-        print("---------------------------------------------------------------")
-        if matches: 
-            print(Fore.YELLOW + "Yara Rules:")
-            for match in matches:
-                print(f"  Rule: {match.rule} - {len(match.strings)} matches ")
-                count += 1
-                #print(f"  Rule: {match.rule} - {len(match.strings)} matches  -> {match.strings}")
-            print(Fore.YELLOW + "Rules Matched:", count)
-            count = 0
-        print("-----------------------")
-        print(Fore.YELLOW + "VirusTotal analysis:")
-        print(Fore.YELLOW + "Hash search:", vt.last_analysis_stats)
-        if vt.last_analysis_stats['malicious'] > 30:
-            print(Fore.RED + "Dangerous")
-        elif vt.last_analysis_stats['malicious'] < 14 and vt.last_analysis_stats['malicious'] > 5:
-            print(Fore.YELLOW + "Suspicious, but maybe not dangerous needs more analysis")
-        elif vt.last_analysis_stats['malicious'] <= 5 :
-            print(Fore.GREEN + "0 or just a few engines have flagged this as malicious. Please note, this does not guarantee that the file is not malicious.")
-        try:    
-            print(Fore.YELLOW + "File_scan:", vts)  
-        except:
-            print("")
+def scan_directory(files_directory):
+    count = 0
+    # Iterar sobre os ficheiros na pasta
+    for root, dirs, files in os.walk(files_directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            # analisar o ficheiro
+            matches = rules.match(file_path)
+            fl = calcular_hash(file_path)
+    
+            vt = file_hash_info(fl)
+            
+            vts = file_scan(file_path)
+            
+            # Processar e imprimir os resultados
+            print("---------------------------------------------------------------")
+            print(Fore.CYAN + f'Scanning file: {file_path}')
+            print(Fore.YELLOW + "File hash (SHA-256):", fl)
+            print("---------------------------------------------------------------")
+            if matches: 
+                print(Fore.YELLOW + "Yara Rules:")
+                for match in matches:
+                    print(f"  Rule: {match.rule} - {len(match.strings)} matches ")
+                    count += 1
+                    #print(f"  Rule: {match.rule} - {len(match.strings)} matches  -> {match.strings}")
+                print(Fore.YELLOW + "Rules Matched:", count)
+                count = 0
+            print("-----------------------")
+            print(Fore.YELLOW + "VirusTotal analysis:")
+            print(Fore.YELLOW + "Hash search:", vt.last_analysis_stats)
+            if vt.last_analysis_stats['malicious'] > 30:
+                print(Fore.RED + "Dangerous")
+            elif vt.last_analysis_stats['malicious'] < 14 and vt.last_analysis_stats['malicious'] > 5:
+                print(Fore.YELLOW + "Suspicious, but maybe not dangerous needs more analysis")
+            elif vt.last_analysis_stats['malicious'] <= 5 :
+                print(Fore.GREEN + "0 or just a few engines have flagged this as malicious. Please note, this does not guarantee that the file is not malicious.")
+            try:    
+                print(Fore.YELLOW + "File_scan:", vts)  
+            except:
+                print("")
 
 
 
+if __name__ == "__main__":
+    #Analisar pasta:
+    files_directory = r'C:\analise'
+    #files_directory = '/caminho/para/ficheiros' # linux
 
+    scan_directory(files_directory)
 
+    ficheiros = [os.path.join(files_directory,f) for f in os.listdir(files_directory) if os.path.isfile(os.path.join(files_directory, f))]
 
+    print(ficheiros)
+    if len(ficheiros) == 1:
+        print(Fore.YELLOW +  "\n============================ File Type: ============================")
+        file_type(ficheiros[0])
 
+        print(Fore.YELLOW + "\n============================ PE Info: ============================")
+        is_pe_file(ficheiros[0])
+    else:
+        print(f"A pasta tem {len(ficheiros)} ficheiros.")
+
+    print("---------------------------------------------------------------")
+    print("Scan completed.")
 
