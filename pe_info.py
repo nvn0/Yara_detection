@@ -3,6 +3,11 @@ import pefile
 import mimetypes
 import sys
 
+# also known as magic numbers/bytes
+file_signature_dict = {"4d5a":"exe file", "7f454c46":"elf file", "d0cf11e0a1b11ae1":"msi or windows document file", "2321":"shebang script file", "494433":"mp3 file", 
+"0efeff":"txt/others file", "89504e470d0a1a0a":"png file"}
+
+
 
 def file_type(exe_path):
     tipo, encoding = mimetypes.guess_type(exe_path)
@@ -10,13 +15,20 @@ def file_type(exe_path):
     print("\nFile type (based on extension):", tipo)
 
 
+    first_file_bytes = ""
 
     #primeiros bytes do ficheiro:
     with open(exe_path, "rb") as f:
         primeiros_bytes = f.read(256)  # lê os primeiros 256 bytes
         print(f"\nFirst bytes:{primeiros_bytes}")
         print(f"\nFirst bytes:{primeiros_bytes.hex()}")
+        first_file_bytes = primeiros_bytes.hex()
 
+
+    for i in file_signature_dict:
+        if i in str(first_file_bytes):
+            print(f"\nSecond validation: Magic bytes in the file correspond to: {file_signature_dict[i]}")
+            
 
 def is_pe_file(exe_path):
 

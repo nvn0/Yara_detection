@@ -19,6 +19,8 @@ def file_scan(path):
             analysis = client.scan_file(f, wait_for_completion=True)
     except:
         print("ERRO - Ocorreu um problema de conexão com o VirusTotal")
+        client.close()
+        return None
     else:
         client.close()
         return analysis

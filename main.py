@@ -104,6 +104,11 @@ def scan_directory(files_directory):
             
             vts = file_scan(file_path)
             
+            # so pra testes
+            #vt = None 
+            #vts = None
+            
+            
             # Processar e imprimir os resultados
             print("---------------------------------------------------------------")
             print(Fore.CYAN + "Scanning file:", file_path)
