@@ -4,8 +4,9 @@ import mimetypes
 import sys
 
 # also known as magic numbers/bytes
-file_signature_dict = {"4d5a":"exe file", "7f454c46":"elf file", "d0cf11e0a1b11ae1":"msi or windows document file", "2321":"shebang script file", "494433":"mp3 file", 
-"0efeff":"txt/others file", "89504e470d0a1a0a":"png file"}
+file_signature_dict = {"4d5a":"exe/ddl/sys - windows executble file", "7f454c46":"elf file", "d0cf11e0a1b11ae1":"msi or windows document file", "2321":"shebang script file", "494433":"mp3 file", 
+"0efeff":"txt/others file", "89504e470d0a1a0a":"png file", "213c617263683e0a":"Linux deb file", "0061736d":"WebAssembly binary format",
+"1b4c7561":"Lua byte code"}
 
 
 
