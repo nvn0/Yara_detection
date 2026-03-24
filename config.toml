@@ -1,0 +1,7 @@
+# Config file
+name = "configs"
+
+
+[VT-scan]
+file_upload = false
+hash_upload = true
